@@ -3,9 +3,10 @@ baseball.py
 plots trajectories of pitches
 9/22/16
 '''
-from numpy import loadtxt, zeros
+from numpy import loadtxt, zeros, array
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from math import sin, cos, sqrt, pi, exp
 
 #load data
 data = loadtxt("FlightData.txt", skiprows=1)
@@ -63,3 +64,78 @@ plt.plot([0.75, 0.75, -0.75, -0.75, 0.75], [0, 0, 0, 0, 0], [-3.5, -6, -6, -3.5,
 plt.xlabel('x')
 plt.ylabel('y')
 plt.show()
+
+done = 0
+
+# define our drag coefficient
+def k_D(v):
+    delta = 5.0
+    vd = 35.0
+    return 0.0039 + 0.0058 / (1.0 + exp((v - vd) / delta))
+
+# define our algorithm
+def euler(vx, vy, vz):
+    x = 0
+    y = 0
+    z = input("Enter the pitcher's release height: ")
+    t = 0
+    h = 0.001
+    k_L = 1.92E-4
+    omega = 1800.0 * 2.0 * pi / 60.0
+
+    # create a loop while the ball is in the air
+    while x <= 18.4:
+        # for plotting purposes
+        X.append(x)
+        Y.append(y)
+        Z.append(z)
+
+        v = sqrt(vx**2 + vy**2 + vz**2)
+
+        # accelerations
+        ax = -k_D(v)*v*vx + k_L*(vz*omega*sin(phi) - vy*omega*cos(phi))
+        ay = -k_D(v)*v*vy + k_L*vx*omega*cos(phi)
+        az = -k_D(v)*v*vz - k_L*vx*omega*sin(phi) - g
+
+        # use Euler
+        vx += ax*h
+        vy += ay*h
+        vz += az*h
+
+        x += vx*h
+        y += vy*h
+        z += vz*h
+
+        t += h
+
+while not done: # input pitch type
+    X = []
+    Y = []
+    Z = []
+    pitch = raw_input("Type of pitch: fastball(f)/curveball(c)/slider(s)/screwball(w): ")
+    if pitch == 'c':
+        v = 34.5
+        phi = 90.0*pi/180.0
+    elif pitch == 's':
+        v = 37.5
+        phi = 45.0*pi/180.0
+    elif pitch == 'w':
+        v = 34.5
+        phi = -90.0*pi/180.0
+    else:
+        v = 42.0
+        phi = 0.0
+
+    # set initial angle from horizontal
+    theta = 3.0*pi/180.0
+
+    # initial velocity components
+    vx = v*cos(theta)
+    vy = 0.0
+    vz = v*sin(theta)
+
+    g = 9.81
+
+    euler(vx, vy, vz)
+
+    # plot trajectory and strike zone
