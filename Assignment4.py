@@ -70,11 +70,12 @@ print "\nProblem 3"
 
 # Problem 4
 print "\nProblem 4"
-mass = 0.02
+mass = 0.002
 g = 9.81
 v = 2
 x = 0
 t = 0
+h = 0.001
 friction = 0
 xs = [x]
 vs = [v]
@@ -82,16 +83,14 @@ ts = [t]
 while v >= 0:
     friction = 0.4 * mass * g
     a = friction / mass
-    v += -a * t
-    x += v * t
-    t += 0.01
-    mass += 0.02
+    v += -a * h
+    x += v * h
+    t += h
+    mass += 2 * h
     xs.append(x)
     vs.append(v)
     ts.append(t)
-    print t, x, v, a, friction, mass
-print ts, xs, vs
-plt.plot(ts, xs, 'bo', label="Displacement (m)")
-plt.plot(ts, vs, 'r+', label="Velocity (m/s")
+plt.plot(ts, xs, 'b--', label="Displacement (m)")
+plt.plot(ts, vs, 'r-', label="Velocity (m/s")
 plt.legend(loc='best')
 plt.show()
