@@ -108,7 +108,7 @@ def euler(vx, vy, vz):
 
         t += h
 
-while not done: # input pitch type
+while not done:     # input pitch type
     X = []
     Y = []
     Z = []
@@ -127,7 +127,7 @@ while not done: # input pitch type
         phi = 0.0
 
     # set initial angle from horizontal
-    theta = 3.0*pi/180.0
+    theta = -3.0*pi/180.0
 
     # initial velocity components
     vx = v*cos(theta)
@@ -139,3 +139,17 @@ while not done: # input pitch type
     euler(vx, vy, vz)
 
     # plot trajectory and strike zone
+    fig = plt.figure()
+    Ax = Axes3D(fig)
+    Ax.plot(X, Y, zs=Z, zdir='z')   # plot path
+    Ax.plot_wireframe(array([[18.4, 18.4], [18.4, 18.4]]), array([[-0.22, 0.22], [-0.22, 0.22]]),
+                      array([[0.5, 0.5], [1.1, 1.1]]), color='r')
+    Ax.set_xlim3d(0, 18.4)
+    Ax.set_ylim3d(-1, 1)
+    Ax.set_zlim3d(0, 2)
+    plt.show()
+
+    reply = raw_input("Again? (y/n) ")  # get response for rerunning
+    if reply == 'n' or reply == 'N':
+        print "Goodbye"
+        done = 1
