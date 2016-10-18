@@ -42,20 +42,19 @@ mercury.acc = vector(G * sun.mass * (1 + alpha / (0.47*AU)**2) / (0.47*AU)**2, 0
 
 h = 1E4
 previousthetas = []
-while alpha <= 0.01:
+while alpha <= 0.004:
 
     time = 0
     thetas = []
     times = []
 
-    while time < 10250000:
-        # r = mag(mercury.pos - sun.pos)
-        r = sqrt(mercury.x**2 + mercury.y**2 + mercury.z**2)
+    while time < 230000 * YEAR:
+        r = mag(mercury.pos - sun.pos)
         radial = (mercury.pos - sun.pos) / r
         theta = degrees(atan(mercury.y / mercury.x))
-        # if cos(theta) * r not in range(int(floor(mercury.x) - 1), int(ceil(mercury.x) + 1)):
-        #     theta = degrees(atan(mercury.x / mercury.y))
-        F = G * sun.mass * mercury.mass * radial * (1 + alpha / r**2) / r**2
+        if int(floor(cos(theta))) * r not in range(int(floor(mercury.x) - 1), int(ceil(mercury.x) + 2)):
+            theta = degrees(atan(mercury.x / mercury.y))
+        F = (G * sun.mass * mercury.mass / r**2) * (1 + alpha / r**2) * radial
         # F = G * sun.mass * mercury.mass * (1 + alpha / r**2) / r**2
         # if 0 <= theta:
         #     # mercury.acc = F / mercury.mass
@@ -84,6 +83,6 @@ while alpha <= 0.01:
         plt.plot(alpha, bestfitline(dthetas, times), 'ko')
 
     previousthetas = thetas
-    alpha += 0.0005
+    alpha += 0.001
 
 plt.show()
