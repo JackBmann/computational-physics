@@ -48,7 +48,7 @@ while alpha <= 0.004:
     thetas = []
     times = []
 
-    while time < 0.175 * YEAR:
+    while time < 10250000:
         r = mag(mercury.pos - sun.pos)
         radial = (mercury.pos - sun.pos) / r
         theta = degrees(atan(mercury.y / mercury.x))
@@ -59,7 +59,7 @@ while alpha <= 0.004:
         time += h
         thetas.append(theta)
         times.append(time)
-        rate(200)
+        rate(600)
 
     if len(previousthetas) > 0:
         dthetas = []
@@ -68,6 +68,6 @@ while alpha <= 0.004:
         plt.plot(alpha, bestfitline(dthetas, times), 'ko')
 
     previousthetas = thetas
-    alpha += 0.001
+    alpha += 0.0005
 
 plt.show()
