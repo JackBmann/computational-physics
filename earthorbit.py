@@ -18,6 +18,7 @@ earth = sphere(pos=(AU, 0, 0), radius=400*6.4E6, mass=6E24, color=(0, 1, 1))
 # initial conditions
 earth.vel = vector(-0.5*sqrt(G*sun.mass/AU), sqrt(G*sun.mass/AU), 0)
 earth.acc = vector(-G*sun.mass/AU**2, 0, 0)
+earth.trail = curve(color=earth.color)
 counter = 0     # for printing values
 L = vector(0, 0, 0)     # angular momentum vector
 rmin = AU
@@ -50,6 +51,7 @@ while True:
     earth.acc = -G*sun.mass*(earth.pos - sun.pos) / r**3
     earth.vel += earth.acc*h
     earth.pos += earth.vel*h
+    earth.trail.append(earth.pos)
 
     if counter >= 1000:
         print "Mag. of Ang. Mom = {0:8.3e}, Energy = {1:8.3e}, Period = {2:8.3e}, Eccentricity = {3:8.3e}"\

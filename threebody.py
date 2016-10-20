@@ -14,7 +14,7 @@ YEAR = 365.25*24*60*60  # year in seconds
 # create two stars
 starA = sphere(pos=(-AU, 0, 0), radius=10*7E8, mass=2E30, color=(1, 1, 0))
 starB = sphere(pos=(AU, 0, 0), radius=5*7E8, mass=2E30, color=(1, 0, 0))
-planet = sphere(pos=(0, AU, 0), radius=2E9, color=color.green)
+planet = sphere(pos=(0, AU, 2*AU), radius=2E9, color=color.green)
 
 # plot axes
 L = 2E11
@@ -25,7 +25,7 @@ zaxis = curve(pos=[(0, 0, 0), (0, 0, L)], color=(0.5, 0.5, 0.5))
 # initial conditions
 starA.vel = vector(0, 1.1E4, 0)
 starB.vel = vector(0, -1.1E4, 0)
-planet.vel = vector(1.2E4, 0, 0)
+planet.vel = vector(0.6E4, 0, -0.3E4)
 varrow = arrow(pos=planet.pos, axis=planet.vel, length=7E9, color=color.white)
 
 # time step
@@ -61,4 +61,4 @@ while True:
     starB.trail.append(pos=starB.pos)
     planet.trail.append(pos=planet.pos)
 
-    rate(200)
+    rate(600)
