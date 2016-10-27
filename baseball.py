@@ -1,21 +1,21 @@
-'''
+"""
 baseball.py
 plots trajectories of pitches
 9/22/16
-'''
+"""
 from numpy import loadtxt, zeros, array
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from math import sin, cos, sqrt, pi, exp
 
-#load data
+# load data
 data = loadtxt("FlightData.txt", skiprows=1)
 ftime = data[:, 1] - data[:, 0]
 tmax = 45
-#number of pitches
+# number of pitches
 N = len(ftime)
 
-#get initial values
+# get initial values
 x = data[:, 2]
 y = data[:, 3]
 z = data[:, 4]
@@ -34,7 +34,7 @@ h = tmax/100.0
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-#step through time
+# step through time
 for i in range(0, N):
     xplot = zeros(45, float)
     yplot = zeros(45, float)
@@ -67,11 +67,13 @@ plt.show()
 
 done = 0
 
+
 # define our drag coefficient
 def k_D(v):
     delta = 5.0
     vd = 35.0
     return 0.0039 + 0.0058 / (1.0 + exp((v - vd) / delta))
+
 
 # define our algorithm
 def euler(vx, vy, vz):

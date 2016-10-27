@@ -29,6 +29,33 @@ for v in (5.0, 10.0, 15.0, 20.0):
 
 # Problem 2
 print "\nProblem 2"
+# Part A
+t = 0.0
+T = 68.0
+Ts = 25.0
+Tend = 0.0
+tend = 0.0
+r = 0.15
+h = 0.1
+tfreezing = 0
+plt.plot(t, T, 'bo', label="Inside Temperature")
+plt.plot(t, 25, 'ro', label="Outside Temperature")
+while t <= 48.0:
+    Tend = T + -r*(T-Ts)*h
+    tend = t + h
+    T += (-r*(T-Ts) + -r*(Tend-Ts))/2*h
+    if tfreezing == 0 and 31.8 < T < 32.2:
+        tfreezing = t
+    plt.plot(t, T, 'bo')
+    plt.plot(t, 25, 'ro')
+    t += h
+# Part B
+print "Parts A and B: The time until Clark Hall reaches 32F is {0:.2f}h".format(tfreezing)
+plt.title("Temperature")
+plt.legend(loc='best')
+plt.show()
+
+# Part C
 def dT_dt(T, Ts): return -r*(T-Ts)
 def Ts(t): return (25+10) - 10*sin(2*pi*(t+6.25)/24)
 t = 0.0
@@ -49,7 +76,12 @@ while t <= 24.0*6:
     plt.plot(t, T, 'bo')
     plt.plot(t, Ts(t), 'ro')
     t += h
-print "The time until Clark Hall reaches 32F is {0:.2f}h".format(tfreezing)
+# Part D
+print "Parts C and D: The time until Clark Hall reaches 32F is {0:.2f}h".format(tfreezing)
 plt.title("Temperature")
 plt.legend(loc='best')
 plt.show()
+
+# Problem 3
+print "\nProblem 3"
+
