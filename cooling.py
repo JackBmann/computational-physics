@@ -26,13 +26,13 @@ h = 0.1
 # plot initial values to get labels for legend
 plt.plot(t, T, 'bo', label="Heun's")
 plt.plot(t, Ts(0), 'ro', label="Surrounding")
-#plt.plot(t, math.tan(t), 'rx', label='Analytic')
+# plt.plot(t, math.tan(t), 'rx', label='Analytic')
 
 # apply Euler to find y(t)
 while t <= 96.0:
     plt.plot(t, T, 'bo')
     plt.plot(t, Ts(t), 'ro')
-    #plt.plot(t, math.tan(t), 'rx')
+    # plt.plot(t, math.tan(t), 'rx')
     Tend = T + dT_dt(T, Ts(t))*h
     tend = t + h
     T += (dT_dt(T, Ts(t)) + dT_dt(Tend, Ts(t)))/2*h
