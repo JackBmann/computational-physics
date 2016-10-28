@@ -5,10 +5,11 @@ Completes the second take home exam
 """
 from math import *
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 # Problem 1
 print "Problem 1"
-vt = 10
+vt = 10.0
 h = 0.0001
 for v in (5.0, 10.0, 15.0, 20.0):
     vi = v
@@ -51,13 +52,15 @@ while t <= 48.0:
     t += h
 # Part B
 print "Parts A and B: The time until Clark Hall reaches 32F is {0:.2f}h".format(tfreezing)
-plt.title("Temperature")
+plt.title("Indoor Temperature changing with a constant Outdoor Temperature")
+plt.xlabel("Time (hr)")
+plt.ylabel("Temperature (F)")
 plt.legend(loc='best')
 plt.show()
 
 # Part C
 def dT_dt(T, Ts): return -r*(T-Ts)
-def Ts(t): return (25+10) - 10*sin(2*pi*(t+6.25)/24)
+def Ts(t): return 20*(1 + 0.5*sin(t / 8))
 t = 0.0
 T = 68.0
 Tend = 0.0
@@ -78,10 +81,67 @@ while t <= 24.0*6:
     t += h
 # Part D
 print "Parts C and D: The time until Clark Hall reaches 32F is {0:.2f}h".format(tfreezing)
-plt.title("Temperature")
-plt.legend(loc='best')
+plt.title("Indoor Temperature changing with a fluctuating Outdoor Temperature")
+plt.xlabel("Time (hr)")
+plt.ylabel("Temperature (F)")
 plt.show()
 
 # Problem 3
 print "\nProblem 3"
+# Part A
+g = 9.81
+dragcoeff = 0.3
+density = 1.2754
+radius = 0.02135
+mass = 0.04593
+kD = dragcoeff*density*(4*pi*radius**2) / (2.0*mass)
+print "Part A: The constant factor k_D is {0:f}.".format(kD)
+
+# Part B
+kL = 1.72E-3
+phi = 0.0
+print "Part B: The angle phi between the spin direction and the vertical direction should be {:.2f}.".format(phi)
+
+
+# Part C
+print "Part C:"
+def graph(theta, omega, v0):
+    X = []
+    Y = []
+    Z = []
+    vx = v0 * cos(theta)
+    vy = abs(v0 * sin(theta))
+    vz = 0
+    x = 0
+    y = 0
+    z = 0
+    t = 0
+    h = 0.001
+    while y >= 0:
+        X.append(x)
+        Y.append(y)
+        Z.append(z)
+        v = sqrt(vx**2 + vy**2 + vz**2)
+        ax = -kD*v*vx + kL*(vz*omega*sin(phi) - vy*omega*cos(phi))
+        ay = -kD*v*vy + kL*vx*omega*cos(phi)
+        az = -kD*v*vz - kL*vx*omega*sin(phi) - g
+        vx += ax*h
+        vy += ay*h
+        vz += az*h
+        x += vx*h
+        y += vy*h
+        z += vz*h
+        t += h
+    fig = plt.figure()
+    Ax = Axes3D(fig)
+    Ax.plot(X, Y, zs=Z, zdir='z')
+    print "The horizontal range of the trajectory of the golf ball is {:.5f}m.".format(abs(x))
+    plt.show()
+
+graph(8, 3600, 134)
+graph(23, 7200, 105)
+graph(45, 10800, 90)
+
+# Problem 4
+print "\nProblem 4"
 

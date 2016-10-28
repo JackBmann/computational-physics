@@ -65,8 +65,6 @@ plt.xlabel('x')
 plt.ylabel('y')
 plt.show()
 
-done = 0
-
 
 # define our drag coefficient
 def k_D(v):
@@ -110,6 +108,7 @@ def euler(vx, vy, vz):
 
         t += h
 
+done = 0
 while not done:     # input pitch type
     X = []
     Y = []
