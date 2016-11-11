@@ -2,7 +2,7 @@
 Completes Assignment 6
 11/3/2016
 """
-from math import sin
+from math import sin, pi, cos
 from numpy import arange
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -103,4 +103,70 @@ Ax.set_xlim3d(0, 60)
 Ax.set_ylim3d(-50, 50)
 Ax.set_zlim3d(-100, 100)
 print "In comparison to the Problem 2, this phase diagram is much more sporadic."
+plt.show()
+
+# Problem 4
+print "\nProblem 4"
+def accL(l, ll, t, tt): return (l0 + l) * tt**2 - k/m*l + g*cos(t)
+def accT(l, ll, t, tt): return -1.0/(l0 + l) * (g*sin(t) + 2*ll*tt)
+l = 1.0
+l0 = 0.5
+ll = 0.0
+t = pi/4.0
+tt = 0.0
+k = 4.9
+m = 5.0
+omega0 = 0.0
+g = 9.81
+a = 0.0
+b = 60.0
+N = 1000
+h = (b - a) / N
+time = []
+timeCounter = 0.0
+lpoints = []
+llpoints = []
+tpoints = []
+ttpoints = []
+while timeCounter <= N:
+    k1ll = accL(l, ll, t, tt) * h
+    k1l = ll * h
+    k1tt = accT(l, ll, t, tt) * h
+    k1t = tt * h
+    k2ll = accL(l + k1l / 2.0, ll + k1ll / 2.0, t + k1t / 2.0, tt + k1tt / 2.0) * h
+    k2l = (ll + k1ll / 2.0) * h
+    k2tt = accT(l + k1l / 2.0, ll + k1ll / 2.0, t + k1t / 2.0, tt + k1tt / 2.0) * h
+    k2t = (tt + k1tt / 2.0) * h
+    k3ll = accL(l + k2l / 2.0, ll + k2ll / 2.0, t + k2t / 2.0, tt + k2tt / 2.0) * h
+    k3l = (ll + k2ll / 2.0) * h
+    k3tt = accT(l + k2l / 2.0, ll + k2ll / 2.0, t + k2t / 2.0, tt + k2tt / 2.0) * h
+    k3t = (tt + k2tt / 2.0) * h
+    k4ll = accL(l + k3l, ll + k3ll, t + k3t, tt + k3tt) * h
+    k4l = (ll + k3ll) * h
+    k4tt = accT(l + k3l, ll + k3ll, t + k3t, tt + k3tt) * h
+    k4t = (tt + k3tt) * h
+    ll += (1 / 6.0) * (k1ll + 2.0 * k2ll + 2.0 * k3ll + k4ll)
+    l += (1 / 6.0) * (k1l + 2.0 * k2l + 2.0 * k3l + k4l)
+    tt += (1 / 6.0) * (k1tt + 2.0 * k2tt + 2.0 * k3tt + k4tt)
+    t += (1 / 6.0) * (k1t + 2.0 * k2t + 2.0 * k3t + k4t)
+    lpoints.append(l)
+    llpoints.append(ll)
+    tpoints.append(t)
+    ttpoints.append(tt)
+    time.append(timeCounter)
+    timeCounter += h
+fig = plt.figure()
+Ax = Axes3D(fig)
+Ax.plot(time, lpoints, zs=llpoints, zdir='z')
+Ax.set_xlim3d(0, N)
+Ax.set_ylim3d(0, 20)
+Ax.set_zlim3d(-10, 10)
+# plt.show()
+
+fig = plt.figure()
+Ax = Axes3D(fig)
+Ax.plot(time, tpoints, zs=ttpoints, zdir='z')
+Ax.set_xlim3d(0, N)
+Ax.set_ylim3d(-5, 5)
+Ax.set_zlim3d(-5, 5)
 plt.show()
