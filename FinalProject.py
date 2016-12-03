@@ -3,24 +3,38 @@ FinalProject.py
 My final project analyzing the stock market with Chaos Theory
 11/28/16
 """
-from math import sqrt, log, sin
+from math import sqrt, log, sin, pi
 import matplotlib.pyplot as plt
+
+
+def data(x):
+    return sin(x)
 
 
 def x(tau):
     rv = 0
-    for i in range(1, tau+1):
-        rv += xs[i]
+    i = 1
+    while i <= tau:
+    # for i in range(1, tau+1):
+    #     rv += xs[i]
+        rv += data(i)
+        i += h
     return 1.0/tau * rv
 
 
 def X(t, tau):
     rvs = []
-    for t in range(t, tau+1):
+    while t <= tau:
+    # for t in range(t, tau+1):
         rv = 0
-        for i in range(1, t+1):
-            rv += xs[i] - x(tau)
+        i = 1
+        while i <= t:
+        # for i in range(1, t+1):
+            # rv += xs[i] - x(tau)
+            rv += data(i) - x(tau)
+            i += h
         rvs.append(1.0/tau * rv)
+        t += h
     return rvs
     # rv = 0
     # for i in range(1, t+1):
@@ -30,13 +44,17 @@ def X(t, tau):
 
 def S(tau):
     rv = 0
-    for i in range(1, tau+1):
-        rv += (xs[i] - x(tau))**2
-    return sqrt(1/tau * rv)
+    i = 1
+    while i <= tau:
+    # for i in range(1, tau+1):
+    #     rv += (xs[i] - x(tau))**2
+        rv += (data(i) - x(tau)) ** 2
+        i += h
+    return sqrt(1.0/tau * rv)
 
 
 def R(tau):
-    t = 1   # 1 <= t <= tau
+    t = tau/2   # 1 <= t <= tau
     return max(X(t, tau)) - min(X(t, tau))
 
 
@@ -47,25 +65,38 @@ def H(tau):
 
 def L(t):
     rv = 0
-    for i in range(0, t+1):
-        rv += log(xs[i+1]/xs[i], 2)
+    i = 0.1
+    while i <= t:
+    # for i in range(0, t):
+        rv += log(abs(data(i+h)/data(i)), 2)
+    #     rv += log(xs[i+1]/xs[i], 2)
+        i += h
     return 1.0/t * rv
 
-t = 1.0
-tau = 2
+t = 0.1
+tau = 2*pi
+h = 0.1
 xs = []
+ts = []
 Hs = []
 Ls = []
-ts = []
+ps = []
 
-while t < tau:
-    xs.append(sin(t))
-    Hs.append(H(tau))
-    Ls.append(L(tau))
+while t <= tau:
+    xs.append(data(t))
     ts.append(t)
-    t += 0.1
+    Hs.append(H(tau))
+    Ls.append(L(t))
+    # ps.append(1.0/L(t))
+    t += h
 
-predictability = 1.0/L(t)
-plt.plot(xs, ts, 'k-')
-plt.plot(Hs, ts, 'b-')
-plt.plot(Ls, ts, 'r-')
+print len(xs), len(ts), len(Hs)
+print ts
+print xs
+print Hs
+print Ls
+# predictability = 1.0/L(t)
+plt.plot(ts, xs, 'k-')
+plt.plot(ts, Hs, 'b-')
+plt.plot(ts, Ls, 'r-')
+plt.show()
