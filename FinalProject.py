@@ -10,7 +10,7 @@ from numpy import loadtxt
 
 def data(x):
     return prices[x-1]
-    # return (sin(2*pi*x/3) + 1)/2
+    # return (sin(5.5*pi*x/100.0 + 5.5) + 1.0)/2.0
 
 
 def x(tau):
@@ -46,7 +46,7 @@ def S(tau):
 
 
 def R(tau):
-    # t = tau/2   # 1 <= t <= tau
+    # 1 <= t <= tau
     return max(X(t, tau)) - min(X(t, tau))
 
 
@@ -61,10 +61,15 @@ def L(t):
     sum = 0
     i = 1
     while i <= t:
-        if data(i) > 0 and data(i+h)/data(i) > 0:
+        if data(i) != 0 and data(i+h)/data(i) != 0:
             sum += log(data(i+h)/data(i), 2)
         i += h
     return 1.0/t * sum
+
+
+def avg(vals):
+    return sum(vals)/len(vals)
+
 
 t = 1
 tau = 250
@@ -80,20 +85,30 @@ while t <= tau:
     xs.append(data(t))
     ts.append(t)
     Hs.append(H(tau))
-    Ls.append(L(t))
-    # ps.append(1.0/L(t))
+    Lt = L(t)
+    Ls.append(Lt)
+    ps.append(1.0/Lt)
     t += h
 
-print ts
-print xs
-print Hs
-print Ls
-print ps
-# predictability = 1.0/L(t)
-plt.title('Apple Stock Price Over One Year')
+sub = "Hurst Exponent: {0:f}, Lyapunov Exponent: {1:f}, Predictability (day): {2:f}".format(avg(Hs), avg(Ls), avg(ps))
+print sub
+plt.figure(1)
+plt.subplot(411)
+plt.title(sub, fontsize=10)
+plt.suptitle('Sinus Stock Price Over 100 Days', y=0.97, fontsize=18)
 plt.plot(ts, xs, 'k-', label='Stock Price')
-plt.plot(ts, Hs, 'r-', label='Hurst Exponent')
-plt.plot(ts, Ls, 'b-', label='Lyapunov Exponent')
-# plt.plot(ts, ps, 'g-', label='Predictability')
 plt.legend(loc='best')
+
+plt.subplot(412)
+plt.plot(ts, Hs, 'r-', label='Hurst Exponent')
+plt.legend(loc='best')
+
+plt.subplot(413)
+plt.plot(ts, Ls, 'b-', label='Lyapunov Exponent')
+plt.legend(loc='best')
+
+plt.subplot(414)
+plt.plot(ts, ps, 'g-', label='Predictability')
+plt.legend(loc='best')
+plt.xlabel('Time t (Days)')
 plt.show()
