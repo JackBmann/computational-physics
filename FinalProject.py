@@ -1,6 +1,6 @@
 """
 FinalProject.py
-My final project analyzing the stock market with Chaos Theory
+Jack Baumann's final project analyzing the stock market with Chaos Theory
 11/28/16
 """
 from math import sqrt, log, sin, pi
@@ -58,13 +58,13 @@ def H(tau):
 
 
 def L(t):
-    rv = 0
+    sum = 0
     i = 1
     while i <= t:
         if data(i) > 0 and data(i+h)/data(i) > 0:
-            rv += log(data(i+h)/data(i), 2)
+            sum += log(data(i+h)/data(i), 2)
         i += h
-    return 1.0/t * rv
+    return 1.0/t * sum
 
 t = 1
 tau = 250
@@ -90,6 +90,7 @@ print Hs
 print Ls
 print ps
 # predictability = 1.0/L(t)
+plt.title('Apple Stock Price Over One Year')
 plt.plot(ts, xs, 'k-', label='Stock Price')
 plt.plot(ts, Hs, 'r-', label='Hurst Exponent')
 plt.plot(ts, Ls, 'b-', label='Lyapunov Exponent')
